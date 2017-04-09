@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    How to read values(Saaty scale 1-9 ):
+    9    - name1 is extremely preferred to name2
+    1    - name1 is equally preferred to name2
+
+    1/9  - name2 is extremely preferred to name1
+-->
+
+<model>
+    <alternative id="1" name="Barcelona"/>
+    <alternative id="2" name="Reykjavik"/>
+    <alternative id="3" name="Rzym"/>
+
+    <criterion id="0" name="satisfaction">
+
+        <weights>
+            <comparison name1="1" name2="2" value="0.5" />
+            <comparison name1="2" name2="3" value="0.5"/>
+            <comparison name1="1" name2="3" value="0.25"/>
+        </weights>
+
+        <criterion id="1" name="climate">
+            <weights>
+                <comparison name1="1" name2="2" value="0.5" />
+            </weights>
+
+            <criterion id="4" name="temperature">
+                <comparison name1="1" name2="3" value="1" />
+                <comparison name1="2" name2="3" value="5"/>
+                <comparison name1="2" name2="1" value="5"/>
+            </criterion>
+
+            <criterion id="5" name="clouds">
+                <comparison name1="1" name2="2" value="3"/>
+                <comparison name1="1" name2="3" value="2" />
+                <comparison name1="3" name2="2" value="4"/>
+            </criterion>
+        </criterion>
+
+        <criterion id="2" name="cost">
+            <comparison name1="1" name2="2" value="4" />
+            <comparison name1="1" name2="3" value="5"/>
+            <comparison name1="2" name2="3" value="3"/>
+        </criterion>
+
+        <criterion id="3" name="environment">
+            <comparison name1="2" name2="3" value="6"/>
+            <comparison name1="1" name2="3" value="4" />
+            <comparison name1="2" name2="1" value="2"/>
+        </criterion>
+    </criterion>
+</model>
