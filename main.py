@@ -1,8 +1,8 @@
 import xml.etree.ElementTree as ET
 import numpy as np
 
-model = ET.parse("test_data_from_book.xml").getroot()
-#  model = ET.parse("test.xml").getroot()
+
+model = ET.fromstring("<?xml version=\"1.0\" encoding=\"UTF-8\"?><model><criterion><weights></weights></criterion></model>")
 COMPARISON = 'comparison'
 ALTERNATIVES = 'alternative'
 WEIGHTS = 'weights'
@@ -21,6 +21,17 @@ RI = {
     9: 1.4499,
     10: 1.4854
 }
+
+
+def load_model_from_file(file):
+    global model
+    model = ET.parse(file).getroot()
+
+
+def load_model_from_string(string):
+    with open('pom.xml', 'w') as f:
+        f.write(string)
+    load_model_from_file('pom.xml')
 
 
 def comparisons(element):
@@ -146,7 +157,24 @@ def check_consistency(root=model.find(CRITERION), recursively=True):
     return True
 
 
+def best_alternative_name(ranking=final_ranking(model.find(CRITERION))):
+    i = 0
+    for mark in ranking:
+        if mark == max(ranking):
+            for a in alternatives():
+                if a.attrib['id'] == str(i):
+                    return a.attrib['name']
+
+        i += 1
+
+
+def get_response(xml):
+    load_model_from_string(xml)
+    return best_alternative_name(final_ranking(model.find(CRITERION)))
+
+
 if __name__ == "__main__":
+    load_model_from_file("test_data_from_book.xml")
     rank = final_ranking(model.find(CRITERION))
     print("Final ranking: ", rank)
 
@@ -155,13 +183,6 @@ if __name__ == "__main__":
         print("Something is not yes")
         print(rank_sum)
 
-    i = 0
-    for mark in rank:
-        if mark == max(rank):
-            for a in alternatives():
-                if a.attrib['id'] == str(i):
-                    print("The highest rated alternative is", a.attrib['name'])
+    print("Consistency:", check_consistency(model.find(CRITERION)))
 
-        i += 1
-
-    print("Consistency:", check_consistency())
+    print("The best choice is", best_alternative_name(final_ranking(model.find(CRITERION))))
